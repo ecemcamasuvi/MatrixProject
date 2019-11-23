@@ -15,6 +15,7 @@ public:
 	Matrix(int rowInput, int columnInput, int valueInput);
 	Matrix(int rowInput, int columnInput, char formatInput);
 	~Matrix();
+	void createMatrix();
 	void resize(int rowInput, int columnInput);
 	void print();
 	void print(std::string file);

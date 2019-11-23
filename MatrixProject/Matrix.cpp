@@ -11,16 +11,7 @@ Matrix<T>::Matrix()
 	this->row = 10;
 	this->column = 10;
 	this->value = 0;
-	T** matrixCurrent = new T*[row];
-	for (int i = 0; i < row; i++) {
-		matrixCurrent[i] = new T[column];
-	}
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < column; j++) {
-			matrixCurrent[i][j] = 0;
-		}
-	}
-	this->matrix = matrixCurrent;
+	createMatrix();
 }
 
 template <class T>
@@ -29,16 +20,7 @@ Matrix<T>::Matrix(int rowInput, int columnInput, int valueInput)
 	this->row = rowInput;
 	this->column = columnInput;
 	this->value = valueInput;
-	T** matrixCurrent = new T*[row];
-	for (int i = 0; i < row; i++) {
-		matrixCurrent[i] = new T[column];
-	}
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < column; j++) {
-			matrixCurrent[i][j] = valueInput;
-		}
-	}
-	this->matrix = matrixCurrent;
+	createMatrix();
 }
 
 template <class T>
@@ -47,15 +29,30 @@ Matrix<T>::Matrix(int rowInput, int columnInput, char formatInput)
 	this->row = rowInput;
 	this->column = columnInput;
 	this->format = formatInput;
-	T** matrixCurrent = new T*[row];
-	for (int i = 0; i < row; i++) {
-		matrixCurrent[i] = new T[column];
+	createMatrix();
+}
+
+template<class T>
+Matrix<T>::~Matrix()
+{
+}
+
+template<class T>
+void Matrix<T>::createMatrix()
+{
+	int rowCurrent = this->row;
+	int columnCurrent = this->column;
+	int valueCurrent = this->value;
+	char formatCurrent = this->format;
+	T** matrixCurrent = new T*[rowCurrent];
+	for (int i = 0; i < rowCurrent; i++) {
+		matrixCurrent[i] = new T[columnCurrent];
 	}
-	switch (formatInput)
+	switch (formatCurrent)
 	{
 	case 'e':
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < column; j++) {
+		for (int i = 0; i < rowCurrent; i++) {
+			for (int j = 0; j < columnCurrent; j++) {
 				if (i == j) {
 					matrixCurrent[i][j] = 1;
 				}
@@ -66,48 +63,28 @@ Matrix<T>::Matrix(int rowInput, int columnInput, char formatInput)
 		}
 		break;
 	case 'r':
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < column; j++) {
+		for (int i = 0; i < rowCurrent; i++) {
+			for (int j = 0; j < columnCurrent; j++) {
 				matrixCurrent[i][j] = rand() % 256;
 			}
 		}
 	default:
-		std::cout << "Geçerli bir ifade giriniz.";
+		for (int i = 0; i < rowCurrent; i++) {
+			for (int j = 0; j < columnCurrent; j++) {
+				matrixCurrent[i][j] = valueCurrent;
+			}
+		}
 		break;
 	}
 	this->matrix = matrixCurrent;
 }
 
-template<class T>
-Matrix<T>::~Matrix()
-{
-}
-
-
 template <class T>
 void Matrix<T>::resize(int rowInput, int columnInput)
 {
-	T** previousMatrix = this->matrix;
-	int previousMatrixRow = this->row;
-	int previousMatrixColumn = this->column;
 	this->row = rowInput;
 	this->column = columnInput;
-	this->matrix = new T*[this->row];
-	for (int i = 0; i < row; i++) {
-		this->matrix[i] = new T[this->column];
-	}
-	for (int i = 0; i < ((this->row < previousMatrixRow) ? this->row : previousMatrixRow); i++) {
-		for (int j = 0; j < ((this->column < previousMatrixColumn) ? this->column : previousMatrixColumn); j++) {
-			this->matrix[i][j] = previousMatrix[i][j];
-		}
-	}
-	/*for (int i = 0; i < row; i++) {
-		for (int j = 0; j < column; j++) {
-			if (matrix[i][j] == null) {
-				matrix[i][j] = 0;
-			}
-		}
-	}*/
+	createMatrix();
 }
 
 template <class T>
@@ -115,7 +92,7 @@ void Matrix<T>::print()
 {
 	for (int i = 0; i < this->row; i++) {
 		for (int j = 0; j < this->column; j++) {
-			std::cout << this->matrix[i][j]+" ";
+			std::cout << this->matrix[i][j];
 		}
 		std::cout << "\n";
 	}
@@ -129,7 +106,7 @@ void Matrix<T>::print(std::string file)
 	{
 		for (int i = 0; i < this->row; i++) {
 			for (int j = 0; j < this->column; j++) {
-				myfile << this->matrix[i][j]+" ";
+				myfile << this->matrix[i][j];
 			}
 			myfile << "\n";
 		}
