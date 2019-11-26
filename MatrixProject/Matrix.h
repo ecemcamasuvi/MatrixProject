@@ -1,7 +1,7 @@
 #ifndef _MATRÝX_H_
 #define _MATRÝX_H_
 #include <string>
-template <class T>
+template <class U>
 class Matrix
 {
 private:
@@ -9,8 +9,9 @@ private:
 	int row;
 	int value;
 	char format;
-	T** matrix;
+	U** matrix;
 	void createMatrix();
+	float determinant(Matrix<U>* item);
 public:
 	Matrix();
 	Matrix(int rowInput, int columnInput, int valueInput);
@@ -19,30 +20,34 @@ public:
 	void resize(int rowInput, int columnInput);
 	void print();
 	void print(std::string file);
-	Matrix<T>* operator+(const Matrix<T>* secondItem);
-	Matrix<T>* operator-(const Matrix<T>* secondItem);
-	Matrix<T>* operator*(const Matrix<T>* secondItem);
-	Matrix<T>* operator+(const int scalarItem);
-	Matrix<T>* operator-(const int scalarItem);
-	Matrix<T>* operator*(const int scalarItem);
-	Matrix<T>* operator/(const int scalarItem);
-	Matrix<T>* operator%(const int scalarItem);
-	Matrix<T>* operator^(const int scalarItem);
-	/*template<typename T>
+	Matrix<U>* T();
+	Matrix<U>* emul(const Matrix<U>* secondItem);
+	Matrix<U>* inv();
+	float det();
+	Matrix<U>* operator+(const Matrix<U>* secondItem);
+	Matrix<U>* operator-(const Matrix<U>* secondItem);
+	Matrix<U>* operator*(const Matrix<U>* secondItem);
+	Matrix<U>* operator+(const int scalarItem);
+	Matrix<U>* operator-(const int scalarItem);
+	Matrix<U>* operator*(const int scalarItem);
+	Matrix<U>* operator/(const int scalarItem);
+	Matrix<U>* operator%(const int scalarItem);
+	Matrix<U>* operator^(const int scalarItem);
+	/*template<typename U>
 	friend
-		Matrix<T>* operator +(const Matrix<T>& firstItem, const Matrix<T>* secondItem);
-	template<typename T>
+		Matrix<U>* operator +(const Matrix<U>& firstItem, const Matrix<U>* secondItem);
+	template<typename U>
 	friend
-		Matrix<T> operator +(const Matrix<T>& matrixItem, int scalarItem);*/
+		Matrix<U> operator +(const Matrix<U>& matrixItem, int scalarItem);*/
 };
 #endif
 //
-//friend Matrix<T>& operator +(const Matrix<T>& firstItem, const Matrix<T>& secondItem)
+//friend Matrix<U>& operator +(const Matrix<U>& firstItem, const Matrix<U>& secondItem)
 //{
 //	if (firstItem->column == secondItem->column&&firstItem->row == secondItem->row) {
-//		Matrix<T> result = new Matrix<T>(firstItem->row, firstItem->column, 'n');
+//		Matrix<U> result = new Matrix<U>(firstItem->row, firstItem->column, 'n');
 //		//n, yeni oluþturulan herhangi bir kurala uymayan bir matrisi ifade eder.
-//		T** resultMatrix = new T*[firstItem->row];
+//		U** resultMatrix = new T*[firstItem->row];
 //		for (int i = 0; i < firstItem->row; i++) {
 //			resultMatrix[i] = new T[firstItem->column];
 //		}
