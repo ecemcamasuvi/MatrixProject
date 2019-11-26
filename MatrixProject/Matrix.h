@@ -9,10 +9,10 @@ private:
 	int row;
 	int value;
 	char format;
-	U** matrix;
 	void createMatrix();
 	float determinant(Matrix<U>* item);
 public:
+	U** matrix;
 	Matrix();
 	Matrix(int rowInput, int columnInput, int valueInput);
 	Matrix(int rowInput, int columnInput, char formatInput);
