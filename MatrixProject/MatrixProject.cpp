@@ -7,11 +7,14 @@
 
 int main()
 {
-	std::cout << "I Hate you C++!!\n";
+	std::cout << "I Hate you C++:'(!!\n";
 	Matrix<int>* m1 = new Matrix<int>(2, 2, 5);
 	Matrix<float>* m2 = new Matrix<float>(2, 2, 'r');
 	Matrix<int>* m3 = new Matrix<int>(3, 6, 1);
-	Image<0, 0, 0>* img = new Image<0, 0, 0>("image.bin","bin");
+	Image<0, 0, 0>* img = new Image<0, 0, 0>("untitled.bmp","bmp");
+	std::cout<<img->getColumn();
+	img->color2gray();
+	img->imwrite("mood.bmp", "bmp");
 	
 	//Matrix<int>* m4=m1->operator^(3);
 	//m2->print();

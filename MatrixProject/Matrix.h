@@ -14,6 +14,10 @@ private:
 public:
 	U** matrix;
 	Matrix();
+	int getColumn();
+	int getRow();
+	void setColumn(int columnInput);
+	void setRow(int rowInput);
 	Matrix(int rowInput, int columnInput, int valueInput);
 	Matrix(int rowInput, int columnInput, char formatInput);
 	~Matrix();

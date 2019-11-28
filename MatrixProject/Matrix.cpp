@@ -14,6 +14,30 @@ Matrix<U>::Matrix()
 	createMatrix();
 }
 
+template<class U>
+int Matrix<U>::getColumn()
+{
+	return this->column;
+}
+
+template<class U>
+int Matrix<U>::getRow()
+{
+	return this->row;
+}
+
+template<class U>
+void Matrix<U>::setColumn(int columnInput)
+{
+	this->column = columnInput;
+}
+
+template<class U>
+void Matrix<U>::setRow(int rowInput)
+{
+	this->row = rowInput;
+}
+
 template <class U>
 Matrix<U>::Matrix(int rowInput, int columnInput, int valueInput)
 {
