@@ -6,13 +6,13 @@
 template<int red, int green, int blue>
 Image<red, green, blue>::Image()
 {
-	this->image = new Matrix<int>(255, 255, 0);
+	this->image = new Matrix<int>(255, 255 * 3, 0);
 }
 
 template<int red, int green, int blue>
 Image<red, green, blue>::Image(int width, int height)
 {
-	this->image = new Matrix<int>(height, width, 0);
+	this->image = new Matrix<int>(height, width * 3, 0);//width*3->çünkü rgb 3 byte 1 pixel'e denk geliyor 
 	this->image->print();
 }
 
@@ -103,7 +103,7 @@ void Image<red, green, blue>::imwrite(std::string fileName, std::string fileForm
 	if (fileFormat._Equal("bmp")) {
 		FILE* f;
 		unsigned char* img = NULL;
-		int w = this->image->getColumn()/3; //1 rgb =3byte
+		int w = this->image->getColumn() / 3; //1 rgb =3byte
 		int h = this->image->getRow();
 		int filesize = 54 + 3 * w * h;  //w is your image width, h is image height, both int
 		int lenght = 3 * w * h;
@@ -148,7 +148,7 @@ void Image<red, green, blue>::imwrite(std::string fileName, std::string fileForm
 	else if (fileFormat._Equal("bin")) {
 		FILE* f;
 		unsigned char* img = NULL;
-		int w = this->image->getColumn()/3; //1 rgb =3byte
+		int w = this->image->getColumn() / 3; //1 rgb =3byte
 		int h = this->image->getRow();
 		int filesize = 2 + 3 * w * h;  //w is your image width, h is image height, both int
 		img = (unsigned char*)malloc(3 * w * h);
@@ -183,12 +183,118 @@ void Image<red, green, blue>::color2gray()
 	int height = this->image->getRow();
 	for (int i = 0; i < height; i++)
 	{
-		for (int j = 0; j+2 < width; j += 3)
+		for (int j = 0; j + 2 < width; j += 3)
 		{
-			int illuminate = this->image->matrix[i][j+1]/3;//r=b=0 
+			int illuminate = this->image->matrix[i][j + 1] / 3;//r=b=0 
 			this->image->matrix[i][j] = illuminate;
-			this->image->matrix[i][j+1] =illuminate;
+			this->image->matrix[i][j + 1] = illuminate;
 			this->image->matrix[i][j + 2] = illuminate;
 		}
 	}
+	this->isGray = true;
+}
+
+template<int red, int green, int blue>
+void Image<red, green, blue>::gray2binary(int thr)
+{
+	if (this->isGray == true) {
+		int width = this->image->getColumn();
+		int height = this->image->getRow();
+		for (int i = 0; i < height; i++)
+		{
+			for (int j = 0; j + 2 < width; j += 3)
+			{
+				int illuminate;
+				if (this->image->matrix[i][j] > thr) {
+					illuminate = 255;//white
+				}
+				else {
+					illuminate = 0;//black
+				}
+				this->image->matrix[i][j] = illuminate;
+				this->image->matrix[i][j + 1] = illuminate;
+				this->image->matrix[i][j + 2] = illuminate;
+			}
+		}
+		this->isBinary = true;
+	}
+	else {
+		std::cout << "\nGörüntü gri olmadýðýndan binary deðere çevrilemiyor.";
+	}
+}
+
+template<int red, int green, int blue>
+void Image<red, green, blue>::erosion()//siyah kýsýmlarý daralt
+{
+	if (this->isBinary == true) {
+		int width = this->image->getColumn();
+		int height = this->image->getRow();
+		for (int i = 1; i < height; i++)
+		{
+			for (int j = 3; j + 2 < width; j += 3)
+			{
+				if (this->image->matrix[i][j] == 255) {//siyah kýsýmlarý daralt
+					this->image->matrix[i - 1][j - 3] = 255;
+					this->image->matrix[i - 1][j - 2] = 255;
+					this->image->matrix[i - 1][j - 1] = 255;
+				}
+				/*if (this->image->matrix[i][j] == 255) {
+					for (int k = 1; k < 4; k++) {
+						this->image->matrix[i - 1][j - k] = 255;
+						this->image->matrix[i - 1][j + k] = 255;
+						this->image->matrix[i][j - k] = 255;
+						this->image->matrix[i][j + k] = 255;
+						this->image->matrix[i + 1][j - k] = 255;
+						this->image->matrix[i + 1][j + k] = 255;
+					}
+					this->image->matrix[i - 1][j] = 255;
+					this->image->matrix[i + 1][j] = 255;
+				}*/
+				else {
+				}
+			}
+		}
+	}
+	else {
+		std::cout << "\nGörüntü binary olmadýðýndan görüntü üzerinde morfolojik bir iþlem gerçekleþtirilemiyor.";
+	}
+}
+
+template<int red, int green, int blue>
+void Image<red, green, blue>::dilation()
+{
+	if (this->isBinary == true) {
+		int width = this->image->getColumn();
+		int height = this->image->getRow();
+		for (int i = 1; i < height; i++)
+		{
+			for (int j = 3; j + 2 < width; j += 3)
+			{
+				if (this->image->matrix[i][j] == 0) {//siyah kýsýmlarý geniþlet
+					this->image->matrix[i - 1][j - 3] = 0;
+					this->image->matrix[i - 1][j - 2] = 0;
+					this->image->matrix[i - 1][j - 1] = 0;
+				}
+				else {
+				}
+			}
+		}
+	}
+	else {
+		std::cout << "\nGörüntü binary olmadýðýndan görüntü üzerinde morfolojik bir iþlem gerçekleþtirilemiyor.";
+	}
+}
+
+template<int red, int green, int blue>
+void Image<red, green, blue>::opening()
+{
+	this->erosion();
+	this->dilation();
+}
+
+template<int red, int green, int blue>
+void Image<red, green, blue>::closing()
+{
+	this->dilation();
+	this->erosion();
 }

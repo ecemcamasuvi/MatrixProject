@@ -14,7 +14,9 @@ int main()
 	Image<0, 0, 0>* img = new Image<0, 0, 0>("untitled.bmp","bmp");
 	std::cout<<img->getColumn();
 	img->color2gray();
-	img->imwrite("mood.bmp", "bmp");
+	img->gray2binary(21760);
+	img->closing();
+	img->imwrite("grayb.bmp", "bmp");
 	
 	//Matrix<int>* m4=m1->operator^(3);
 	//m2->print();
