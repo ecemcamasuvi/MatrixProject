@@ -1,23 +1,20 @@
 #pragma once
 #include "Matrix.h"
 #include <string>
-template<int red,int green,int blue>
+template<typename rgb>
 class Image :public Matrix<int>
 {
 private:
-	struct {
-		int redVal=red;
-		int greenVal=green;
-		int blueVal=blue;
-	}rgb;
-	Matrix<int>* image;
+	Matrix<int>* redVal;
+	Matrix<int>* greenVal;
+	Matrix<int>* blueVal;
 	void readFromFile(std::string fileName, std::string fileFormat);
-	bool isGray=false;
-	bool isBinary=false;
+	bool isGray = false;
+	bool isBinary = false;
 public:
 	Image();
-	Image(int width,int height);
-	Image(std::string fileName,std::string fileFormat);
+	Image(int width, int height);
+	Image(std::string fileName, std::string fileFormat);
 	~Image();
 	void imread(std::string fileName, std::string fileFormat);
 	void imwrite(std::string fileName, std::string fileFormat);
@@ -28,4 +25,5 @@ public:
 	void opening();
 	void closing();
 };
+
 

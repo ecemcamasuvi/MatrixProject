@@ -1,11 +1,5 @@
 ﻿  MatrixProject.cpp
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Image.cpp(137,1): warning C4267: 'başlatılıyor': 'size_t' - 'int' dönüşümü; veri kaybı olabilir
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Image.cpp(102): message : sınıf şablon üye işlevi 'void Image<0,0,0>::imwrite(std::string,std::string)' derlenirken
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(19): message : derlenen şablon işlevi 'void Image<0,0,0>::imwrite(std::string,std::string)' örneği oluşturma başvurusuna bakın
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(14): message : derlenen sınıf şablon örneği oluşturma 'Image<0,0,0>' başvurusuna bakın
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Image.cpp(166,38): warning C4838: 'int ile 'unsigned char arasında dönüştürme bir daraltma dönüştürmesi gerektiriyor
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Image.cpp(166,40): warning C4838: 'int ile 'unsigned char arasında dönüştürme bir daraltma dönüştürmesi gerektiriyor
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Image.cpp(167,1): warning C4267: 'başlatılıyor': 'size_t' - 'int' dönüşümü; veri kaybı olabilir
+C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(14,2): warning C4091: 'typedef ': hiçbir değişken bildirimi yapılmadığında 'rgb' solunda yoksayılır
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(93,34): warning C4244: '=': 'int' - 'U' dönüşümü; veri kaybı olabilir
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(93,34): warning C4244:         with
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(93,34): warning C4244:         [
@@ -14,8 +8,8 @@ C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(93,34): warnin
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(66): message : sınıf şablon üye işlevi 'void Matrix<float>::createMatrix(void)' derlenirken
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(56): message : derlenen şablon işlevi 'void Matrix<float>::createMatrix(void)' örneği oluşturma başvurusuna bakın
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(52): message : sınıf şablon üye işlevi 'Matrix<float>::Matrix(int,int,char)' derlenirken
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(12): message : derlenen şablon işlevi 'Matrix<float>::Matrix(int,int,char)' örneği oluşturma başvurusuna bakın
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(12): message : derlenen sınıf şablon örneği oluşturma 'Matrix<float>' başvurusuna bakın
+C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(20): message : derlenen şablon işlevi 'Matrix<float>::Matrix(int,int,char)' örneği oluşturma başvurusuna bakın
+C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(20): message : derlenen sınıf şablon örneği oluşturma 'Matrix<float>' başvurusuna bakın
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(100,27): warning C4244: '=': 'int' - 'U' dönüşümü; veri kaybı olabilir
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(100,27): warning C4244:         with
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(100,27): warning C4244:         [

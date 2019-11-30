@@ -1,23 +1,27 @@
+#include "pch.h"
 #include "Image.h"
 #include <string>
 #include<iostream>
 #include<fstream>
 
-template<int red, int green, int blue>
-Image<red, green, blue>::Image()
+template<typename rgb>
+Image<rgb>::Image()
 {
-	this->image = new Matrix<int>(255, 255 * 3, 0);
+	this->redVal = new Matrix<int>(255, 255, 0);
+	this->greenVal = new Matrix<int>(255, 255, 0);
+	this->blueVal = new Matrix<int>(255, 255, 0);
 }
 
-template<int red, int green, int blue>
-Image<red, green, blue>::Image(int width, int height)
+template<typename rgb>
+Image<rgb>::Image(int width, int height)
 {
-	this->image = new Matrix<int>(height, width * 3, 0);//width*3->çünkü rgb 3 byte 1 pixel'e denk geliyor 
-	this->image->print();
+	this->redVal = new Matrix<int>(height, width, 0);
+	this->greenVal = new Matrix<int>(height, width, 0);
+	this->blueVal = new Matrix<int>(height, width, 0);
 }
 
-template<int red, int green, int blue>
-void Image<red, green, blue>::readFromFile(std::string fileName, std::string fileFormat)
+template<typename rgb>
+void Image<rgb>::readFromFile(std::string fileName, std::string fileFormat)
 {
 	if (fileFormat._Equal("bmp")) {
 		std::ifstream readFile(fileName, std::ios::binary | std::ios::in);
@@ -37,14 +41,17 @@ void Image<red, green, blue>::readFromFile(std::string fileName, std::string fil
 			char* data = new char[size];
 			readFile.read(data, size);// read the rest of the data at once
 			readFile.close();
-			this->image = new Matrix<int>(height, width * 3, 0);
+			this->redVal = new Matrix<int>(height, width, 0);
+			this->greenVal = new Matrix<int>(height, width, 0);
+			this->blueVal = new Matrix<int>(height, width, 0);
 			int k = 0;
 			for (int i = 0; i < height; i++) {
-				for (int j = 0; j < width * 3; j++) {
-					this->image->matrix[i][j] = *(int*)&data[k];
-					k++;
+				for (int j = 0; j < width; j++) {
+					this->redVal->matrix[i][j] = *(int*)&data[k];
+					this->greenVal->matrix[i][j] = *(int*)&data[k + 1];
+					this->blueVal->matrix[i][j] = *(int*)&data[k + 2];
+					k += 3;
 				}
-				k++;
 			}
 			//this->image->setColumn(this->image->getColumn() / 3);
 
@@ -66,45 +73,48 @@ void Image<red, green, blue>::readFromFile(std::string fileName, std::string fil
 			char* data = new char[size];
 			readFile.read(data, size);// read the rest of the data at once
 			readFile.close();
-			this->image = new Matrix<int>(height, width * 3, 0);
+			this->redVal = new Matrix<int>(height, width, 0);
+			this->greenVal = new Matrix<int>(height, width, 0);
+			this->blueVal = new Matrix<int>(height, width, 0);
 			int k = 0;
 			for (int i = 0; i < height; i++) {
-				for (int j = 0; j < width * 3; j++) {
-					this->image->matrix[i][j] = *(int*)&data[k];
-					k++;
+				for (int j = 0; j < width; j++) {
+					this->redVal->matrix[i][j] = *(int*)&data[k];
+					this->greenVal->matrix[i][j] = *(int*)&data[k + 1];
+					this->blueVal->matrix[i][j] = *(int*)&data[k + 2];
+					k += 3;
 				}
-				k++;
 			}
 			//this->image->setColumn(this->image->getColumn() / 3);
 		}
 	}
 }
 
-template<int red, int green, int blue>
-Image<red, green, blue>::Image(std::string fileName, std::string fileFormat)
+template<typename rgb>
+Image<rgb>::Image(std::string fileName, std::string fileFormat)
 {
 	readFromFile(fileName, fileFormat);
 }
 
-template<int red, int green, int blue>
-Image<red, green, blue>::~Image()
+template<typename rgb>
+Image<rgb>::~Image()
 {
 }
 
-template<int red, int green, int blue>
-void Image<red, green, blue>::imread(std::string fileName, std::string fileFormat)
+template<typename rgb>
+void Image<rgb>::imread(std::string fileName, std::string fileFormat)
 {
 	readFromFile(fileName, fileFormat);
 }
 
-template<int red, int green, int blue>
-void Image<red, green, blue>::imwrite(std::string fileName, std::string fileFormat)
+template<typename rgb>
+void Image<rgb>::imwrite(std::string fileName, std::string fileFormat)
 {
 	if (fileFormat._Equal("bmp")) {
 		FILE* f;
 		unsigned char* img = NULL;
-		int w = this->image->getColumn() / 3; //1 rgb =3byte
-		int h = this->image->getRow();
+		int w = this->redVal->getColumn(); //1 rgb =3byte
+		int h = this->redVal->getRow();
 		int filesize = 54 + 3 * w * h;  //w is your image width, h is image height, both int
 		int lenght = 3 * w * h;
 		img = (unsigned char*)malloc(lenght);
@@ -112,12 +122,13 @@ void Image<red, green, blue>::imwrite(std::string fileName, std::string fileForm
 		int k = 0;
 		for (int i = 0; i < h; i++)
 		{
-			for (int j = 0; j < w * 3; j++)
+			for (int j = 0; j < w; j++)
 			{
-				img[k] = this->image->matrix[i][j];
-				k++;
+				img[k] = this->redVal->matrix[i][j];
+				img[k + 1] = this->greenVal->matrix[i][j];
+				img[k + 2] = this->blueVal->matrix[i][j];
+				k += 3;
 			}
-			k++;
 		}
 		unsigned char bmpfileheader[14] = { 'B','M', 0,0,0,0, 0,0, 0,0, 54,0,0,0 };
 		unsigned char bmpinfoheader[40] = { 40,0,0,0, 0,0,0,0, 0,0,0,0, 1,0, 24,0 };
@@ -148,20 +159,21 @@ void Image<red, green, blue>::imwrite(std::string fileName, std::string fileForm
 	else if (fileFormat._Equal("bin")) {
 		FILE* f;
 		unsigned char* img = NULL;
-		int w = this->image->getColumn() / 3; //1 rgb =3byte
-		int h = this->image->getRow();
+		int w = this->redVal->getColumn(); //1 rgb =3byte
+		int h = this->redVal->getRow();
 		int filesize = 2 + 3 * w * h;  //w is your image width, h is image height, both int
 		img = (unsigned char*)malloc(3 * w * h);
 		memset(img, 0, 3 * w * h);
 		int k = 0;
 		for (int i = 0; i < h; i++)
 		{
-			for (int j = 0; j < w * 3; j++)
+			for (int j = 0; j < w; j++)
 			{
-				img[k] = this->image->matrix[i][j];
-				k++;
+				img[k] = this->redVal->matrix[i][j];
+				img[k + 1] = this->greenVal->matrix[i][j];
+				img[k + 2] = this->blueVal->matrix[i][j];
+				k += 3;
 			}
-			k++;
 		}
 		unsigned char bmpfileheader[2] = { w,h };
 		int n = fileName.length();
@@ -176,44 +188,52 @@ void Image<red, green, blue>::imwrite(std::string fileName, std::string fileForm
 	}
 }
 
-template<int red, int green, int blue>
-void Image<red, green, blue>::color2gray()
+template<typename rgb>
+void Image<rgb>::color2gray()
 {
-	int width = this->image->getColumn();
-	int height = this->image->getRow();
+	int width = this->redVal->getColumn();
+	int height = this->redVal->getRow();
 	for (int i = 0; i < height; i++)
 	{
-		for (int j = 0; j + 2 < width; j += 3)
+		for (int j = 0; j < width; j++)
 		{
-			int illuminate = this->image->matrix[i][j + 1] / 3;//r=b=0 
-			this->image->matrix[i][j] = illuminate;
-			this->image->matrix[i][j + 1] = illuminate;
-			this->image->matrix[i][j + 2] = illuminate;
+			int illuminate = this->greenVal->matrix[i][j] / 3;//r=b=0 
+			this->redVal->matrix[i][j] = illuminate;
+			this->greenVal->matrix[i][j] = illuminate;
+			this->blueVal->matrix[i][j] = illuminate;
 		}
 	}
 	this->isGray = true;
 }
 
-template<int red, int green, int blue>
-void Image<red, green, blue>::gray2binary(int thr)
+template<typename rgb>
+void Image<rgb>::gray2binary(int thr)
 {
 	if (this->isGray == true) {
-		int width = this->image->getColumn();
-		int height = this->image->getRow();
+		int width = this->redVal->getColumn();
+		int height = this->redVal->getRow();
 		for (int i = 0; i < height; i++)
 		{
-			for (int j = 0; j + 2 < width; j += 3)
+			for (int j = 0; j < width; j++)
 			{
-				int illuminate;
-				if (this->image->matrix[i][j] > thr) {
-					illuminate = 255;//white
+				if (this->redVal->matrix[i][j] > thr) {
+					this->redVal->matrix[i][j] = 255;//white
 				}
 				else {
-					illuminate = 0;//black
+					this->redVal->matrix[i][j] = 0;//black
 				}
-				this->image->matrix[i][j] = illuminate;
-				this->image->matrix[i][j + 1] = illuminate;
-				this->image->matrix[i][j + 2] = illuminate;
+				if (this->greenVal->matrix[i][j] > thr) {
+					this->greenVal->matrix[i][j] = 255;//white
+				}
+				else {
+					this->greenVal->matrix[i][j] = 0;//black
+				}
+				if (this->blueVal->matrix[i][j] > thr) {
+					this->blueVal->matrix[i][j] = 255;//white
+				}
+				else {
+					this->blueVal->matrix[i][j] = 0;//black
+				}
 			}
 		}
 		this->isBinary = true;
@@ -223,34 +243,52 @@ void Image<red, green, blue>::gray2binary(int thr)
 	}
 }
 
-template<int red, int green, int blue>
-void Image<red, green, blue>::erosion()//siyah kýsýmlarý daralt
+template<typename rgb>
+void Image<rgb>::erosion()//siyah kýsýmlarý daralt
 {
 	if (this->isBinary == true) {
-		int width = this->image->getColumn();
-		int height = this->image->getRow();
+		int width = this->redVal->getColumn();
+		int height = this->redVal->getRow();
 		for (int i = 1; i < height; i++)
 		{
 			for (int j = 3; j + 2 < width; j += 3)
 			{
-				if (this->image->matrix[i][j] == 255) {//siyah kýsýmlarý daralt
-					this->image->matrix[i - 1][j - 3] = 255;
-					this->image->matrix[i - 1][j - 2] = 255;
-					this->image->matrix[i - 1][j - 1] = 255;
+				if (this->redVal->matrix[i][j] == 255) {//siyah kýsýmlarý daralt
+					this->redVal->matrix[i - 1][j - 1] = 255;
 				}
-				/*if (this->image->matrix[i][j] == 255) {
-					for (int k = 1; k < 4; k++) {
-						this->image->matrix[i - 1][j - k] = 255;
-						this->image->matrix[i - 1][j + k] = 255;
-						this->image->matrix[i][j - k] = 255;
-						this->image->matrix[i][j + k] = 255;
-						this->image->matrix[i + 1][j - k] = 255;
-						this->image->matrix[i + 1][j + k] = 255;
-					}
-					this->image->matrix[i - 1][j] = 255;
-					this->image->matrix[i + 1][j] = 255;
-				}*/
-				else {
+				if (this->greenVal->matrix[i][j] == 255) {//siyah kýsýmlarý daralt
+					this->greenVal->matrix[i - 1][j - 1] = 255;
+				}
+				if (this->blueVal->matrix[i][j] == 255) {//siyah kýsýmlarý daralt
+					this->blueVal->matrix[i - 1][j - 1] = 255;
+				}
+
+			}
+		}
+	}
+	else {
+		std::cout << "\nGörüntü binary olmadýðýndan görüntü üzerinde morfolojik bir iþlem gerçekleþtirilemiyor.";
+	}
+}
+
+template<typename rgb>
+void Image<rgb>::dilation()
+{
+	if (this->isBinary == true) {
+		int width = this->redVal->getColumn();
+		int height = this->redVal->getRow();
+		for (int i = 1; i < height; i++)
+		{
+			for (int j = 3; j + 2 < width; j += 3)
+			{
+				if (this->redVal->matrix[i][j] == 0) {//siyah kýsýmlarý geniþlet
+					this->redVal->matrix[i - 1][j - 1] = 0;
+				}
+				if (this->greenVal->matrix[i][j] == 255) {//siyah kýsýmlarý geniþlet
+					this->greenVal->matrix[i - 1][j - 1] = 0;
+				}
+				if (this->blueVal->matrix[i][j] == 255) {//siyah kýsýmlarý geniþlet
+					this->blueVal->matrix[i - 1][j - 1] = 0;
 				}
 			}
 		}
@@ -260,41 +298,17 @@ void Image<red, green, blue>::erosion()//siyah kýsýmlarý daralt
 	}
 }
 
-template<int red, int green, int blue>
-void Image<red, green, blue>::dilation()
-{
-	if (this->isBinary == true) {
-		int width = this->image->getColumn();
-		int height = this->image->getRow();
-		for (int i = 1; i < height; i++)
-		{
-			for (int j = 3; j + 2 < width; j += 3)
-			{
-				if (this->image->matrix[i][j] == 0) {//siyah kýsýmlarý geniþlet
-					this->image->matrix[i - 1][j - 3] = 0;
-					this->image->matrix[i - 1][j - 2] = 0;
-					this->image->matrix[i - 1][j - 1] = 0;
-				}
-				else {
-				}
-			}
-		}
-	}
-	else {
-		std::cout << "\nGörüntü binary olmadýðýndan görüntü üzerinde morfolojik bir iþlem gerçekleþtirilemiyor.";
-	}
-}
-
-template<int red, int green, int blue>
-void Image<red, green, blue>::opening()
+template<typename rgb>
+void Image<rgb>::opening()
 {
 	this->erosion();
 	this->dilation();
 }
 
-template<int red, int green, int blue>
-void Image<red, green, blue>::closing()
+template<typename rgb>
+void Image<rgb>::closing()
 {
 	this->dilation();
 	this->erosion();
 }
+
