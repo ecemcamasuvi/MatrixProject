@@ -13,6 +13,7 @@ private:
 	Matrix<int>* tempArray;
 	void setNames();
 	void createTable();
+	void updateTable();
 public:
 	Table();
 	Table(int r,int c,int d);
@@ -20,6 +21,9 @@ public:
 	int itemAt(int r, int c);
 	int itemAt(std::string s);
 	int itemAt(std::string rs,std::string cs);
+	void setRowNames(std::string s[], int n);
+	void setColNames(std::string s[], int n);
+	void print();
 	~Table();
 };
 

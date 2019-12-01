@@ -15,14 +15,17 @@ typedef struct rgb {
 
 int main()
 {
-	std::cout << "I really Hateee C++!!hate hate  !!!\n";
-	Matrix<int>* m1 = new Matrix<int>(2, 2, 5);
-	Matrix<float>* m2 = new Matrix<float>(2, 2, 'r');
-	Matrix<int>* m3 = new Matrix<int>(3, 6, 1);
+	//3. KISIM
 	Table<int>* tab = new Table<int>(4,33,'r');
 	std::cout<<tab->itemAt(2, 25);
 	std::cout<<tab->itemAt("A2");
 	std::cout<<tab->itemAt("2","AA");
+	std::string s[] = { "aaaaa","2. satir" };
+	tab->setRowNames(s , 2);
+	tab->setColNames(s, 2);
+	tab->print();
+
+
 	/*2. KISIM
 	Image<rgb>* img = new Image<rgb>("untitled.bmp","bmp");
 	std::cout<<img->getColumn();
@@ -33,7 +36,10 @@ int main()
 	img->imwrite("grayb.bmp", "bmp");*/
 
 	//1. KISIM
-	//Matrix<int>* m4=m1->operator^(3);
+	//Matrix<int>* m1 = new Matrix<int>(2, 2, 5);
+	//Matrix<float>* m2 = new Matrix<float>(2, 2, 'r');
+	//Matrix<int>* m3 = new Matrix<int>(3, 6, 1);
+	////Matrix<int>* m4=m1->operator^(3);
 	//m2->print();
 	//m2->T()->print();
 	//m2->print();

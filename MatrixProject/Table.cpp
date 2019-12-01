@@ -14,8 +14,8 @@ void Table<U>::setNames()
 	}
 	else {
 		this->colNames = new std::string[columnCount];
-		int k = 0;
-		while (columnCount > 0) {
+		int k = 0;//sütun adlarý max 4 karakter olabilir.
+		while (columnCount > 0&&k<=4) {
 			int j = 26;
 			if (columnCount < 26) {
 				j = columnCount;
@@ -49,6 +49,28 @@ void Table<M>::createTable()
 		matrixCurrent[i] = new std::string[this->colCount];
 	}
 	setNames();
+	for (int i = 0; i < this->rowCount; i++) {
+		matrixCurrent[i][0] = this->rowNames[i];
+	}
+	for (int i = 1; i < this->colCount; i++) {
+		matrixCurrent[0][i] = this->colNames[i - 1];
+	}
+	for (int i = 1; i < this->rowCount; i++) {
+		for (int j = 1; j < this->colCount; j++) {
+			matrixCurrent[i][j] = std::to_string(this->tempArray->matrix[i - 1][j - 1]);
+
+		}
+	}
+	this->table = matrixCurrent;
+}
+
+template<class M>
+void Table<M>::updateTable()
+{
+	std::string** matrixCurrent = new std::string * [this->rowCount];
+	for (int i = 0; i < this->rowCount; i++) {
+		matrixCurrent[i] = new std::string[this->colCount];
+	}
 	for (int i = 0; i < this->rowCount; i++) {
 		matrixCurrent[i][0] = this->rowNames[i];
 	}
@@ -143,6 +165,46 @@ int Table<M>::itemAt(std::string rs, std::string cs)
 }
 
 template<class M>
+void Table<M>::setRowNames(std::string s[], int n)
+{
+	if (n > this->rowCount) {
+		n = this->rowCount-1;
+	}
+	for (int i = 0; i < n; i++) { 
+		s[i] = s[i].substr(0, 8);//max 8 karakter
+		this->rowNames[i+1] = s[i];//0. karakter satýr sütun kesiþimi ondan 0
+	}
+	updateTable();//update
+}
+
+template<class M>
+void Table<M>::setColNames(std::string s[], int n)
+{
+	if (n > this->colCount) {
+		n = this->colCount;
+	}
+	for (int i = 0; i < n; i++) {
+		s[i] = s[i].substr(0, 4);//max 4 karakter
+		this->colNames[i] = s[i];
+	}
+	updateTable();//update
+}
+
+template<class M>
+void Table<M>::print()
+{
+	std::cout << "\n";
+	for (int i = 0; i < this->rowCount; i++) {
+		for (int j = 0; j < this->colCount; j++) {
+			std::cout << this->table[i][j];
+			std::cout << "  ";
+		}
+		std::cout << "\n";
+	}
+}
+
+template<class M>
 Table<M>::~Table()
 {
+
 }

@@ -182,8 +182,6 @@ void Image<rgb>::imwrite(std::string fileName, std::string fileFormat)
 		f = fopen(c, "wb");
 		fwrite(bmpfileheader, 1, 2, f);
 		fwrite(img, 1, filesize - 2, f);
-
-		free(img);
 		fclose(f);
 	}
 }
