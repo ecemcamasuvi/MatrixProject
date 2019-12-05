@@ -1,16 +1,16 @@
 #ifndef _MATRÝX_H_
 #define _MATRÝX_H_
 #include <string>
-template <class U>
+template <class U>//jenerik class->sadece <> içerisine girilen tipte veriler alýr nesnesi.
 class Matrix
 {
 private:
-	int column;
-	int row;
-	int value;
-	char format;
+	int row;//satýr
+	int column;//sütun
+	int value;//eleman deðeri
+	char format;//r ya da e
 	void createMatrix();
-	float determinant(Matrix<U>* item);
+	int determinant(Matrix<U>* item);
 public:
 	U** matrix;
 	Matrix();
@@ -21,13 +21,13 @@ public:
 	Matrix(int rowInput, int columnInput, int valueInput);
 	Matrix(int rowInput, int columnInput, char formatInput);
 	~Matrix();
-	void resize(int rowInput, int columnInput);
+	void resize(int rowInput, int columnInput);//yeniden boyutlandýrma
 	void print();
 	void print(std::string file);
-	Matrix<U>* T();
-	Matrix<U>* emul(const Matrix<U>* secondItem);
-	Matrix<U>* inv();
-	float det();
+	Matrix<U>* T();//transpozu satýr sütun oluyor.
+	Matrix<U>* emul(const Matrix<U>* secondItem);//eleman düzeyinde çarpma iþlemi
+	Matrix<U>* inv();//tersi
+	int det();//determinant
 	Matrix<U>* operator+(const Matrix<U>* secondItem);
 	Matrix<U>* operator-(const Matrix<U>* secondItem);
 	Matrix<U>* operator*(const Matrix<U>* secondItem);

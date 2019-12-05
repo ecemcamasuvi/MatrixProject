@@ -115,13 +115,13 @@ Table<M>::Table(int r, int c, char ch)
 }
 
 template<class M>
-int Table<M>::itemAt(int r, int c)
+int Table<M>::itemAt(int r, int c)//r. satýrdaki ve c. sütundaki deðeri döndür
 {
-	return (int)this->tempArray->matrix[r][c];
+	return (int)this->tempArray->matrix[r-1][c];
 }
 
 template<class M>
-int Table<M>::itemAt(std::string s)
+int Table<M>::itemAt(std::string s) 
 {
 	const char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int column = 0;
@@ -138,7 +138,7 @@ int Table<M>::itemAt(std::string s)
 		}
 	}
 	int row = stoi(s);
-	return (int)this->tempArray->matrix[row][column];
+	return (int)this->tempArray->matrix[row-1][column];
 }
 
 template<class M>
@@ -161,7 +161,7 @@ int Table<M>::itemAt(std::string rs, std::string cs)
 			}
 		}
 	}
-	return (int)this->tempArray->matrix[row][column];
+	return (int)this->tempArray->matrix[row-1][column];
 }
 
 template<class M>

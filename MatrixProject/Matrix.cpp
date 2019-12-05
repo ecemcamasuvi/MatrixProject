@@ -68,13 +68,13 @@ void Matrix<U>::createMatrix()
 	int columnCurrent = this->column;
 	int valueCurrent = this->value;
 	char formatCurrent = this->format;
-	U** matrixCurrent = new U * [rowCurrent];
-	for (int i = 0; i < rowCurrent; i++) {
+	U** matrixCurrent = new U * [rowCurrent];//önce satýr pointer ile oluþturuluyor
+	for (int i = 0; i < rowCurrent; i++) {//sonra her bir satýr için sütunlar oluþturulur
 		matrixCurrent[i] = new U[columnCurrent];
 	}
 	switch (formatCurrent)
 	{
-	case 'e':
+	case 'e'://birim matris
 		for (int i = 0; i < rowCurrent; i++) {
 			for (int j = 0; j < columnCurrent; j++) {
 				if (i == j) {
@@ -86,15 +86,14 @@ void Matrix<U>::createMatrix()
 			}
 		}
 		break;
-	case 'r':
+	case 'r'://random
 		for (int i = 0; i < rowCurrent; i++) {
 			for (int j = 0; j < columnCurrent; j++) {
-				//matrixCurrent[i][j] = rand() % 5;
-				matrixCurrent[i][j] = rand() % 256;
+				matrixCurrent[i][j] = rand() % 256;//0-256 arasýnda deðerler
 			}
 		}
 		break;
-	default:
+	default://value setlendiyse
 		for (int i = 0; i < rowCurrent; i++) {
 			for (int j = 0; j < columnCurrent; j++) {
 				matrixCurrent[i][j] = valueCurrent;
@@ -122,17 +121,17 @@ void Matrix<U>::resize(int rowInput, int columnInput)
 			for (int j = 0; j < ((columnInput < this->column) ? columnInput : this->column); j++) {
 				matrixCurrent[i][j] = this->matrix[i][j];
 			}
-		}
+		}//hangisi küçükse onu al elimizdeki verileri depolamak için
 		for (int i = ((rowInput < this->row) ? rowInput : this->row); i < rowInput; i++) {
 			for (int j = 0; j < columnInput; j++) {
 				matrixCurrent[i][j] = 0;
 			}
-		}
+		}//satýr bazýnda satýr sayýsý arttýysa artan kýsýmlara 0 ata azalmadýysa bu döngüye hiç girme
 		for (int i = 0; i < rowInput; i++) {
 			for (int j = ((columnInput < this->column) ? columnInput : this->column); j < columnInput; j++) {
 				matrixCurrent[i][j] = 0;
 			}
-		}
+		}//sütun bazýnda "" ""
 		//Herhangi bir örüntü bulunmayan bir matrisin boyutu büyüdüyse yeni oluþan bölgeleri 0'a setle. 
 		//Önceki durumunda bulunan kýsýmlar ayný kalsýn.
 		this->row = rowInput;
@@ -155,7 +154,7 @@ void Matrix<U>::print()
 }
 
 template<class U>
-void Matrix<U>::print(std::string file)
+void Matrix<U>::print(std::string file)//dosya içerisine yazmak
 {
 	std::ofstream myfile(file);
 	if (myfile.is_open())
@@ -163,6 +162,7 @@ void Matrix<U>::print(std::string file)
 		for (int i = 0; i < this->row; i++) {
 			for (int j = 0; j < this->column; j++) {
 				myfile << this->matrix[i][j];
+				myfile << "  ";
 			}
 			myfile << "\n";
 		}
@@ -331,7 +331,7 @@ Matrix<U>* Matrix<U>::T()
 }
 
 template<class U>
-Matrix<U>* Matrix<U>::emul(const Matrix<U>* secondItem)
+Matrix<U>* Matrix<U>::emul(const Matrix<U>* secondItem)//eleman düzeyinde çarpma iþlemi
 {
 	if (this->column == secondItem->column && this->row == secondItem->row) {
 		Matrix<U>* result = new Matrix<U>(this->row, this->column, 0);
@@ -411,10 +411,10 @@ Matrix<U>* Matrix<U>::inv()
 }
 
 template<class U>
-float Matrix<U>::det()
+int Matrix<U>::det()
 {
 	if (this->column == this->row) {
-		float x = determinant(this);
+		int x = determinant(this);
 		return x;
 	}
 	else {
@@ -423,7 +423,7 @@ float Matrix<U>::det()
 	}
 }
 template<class U>
-float Matrix<U>::determinant(Matrix<U>* item)
+int Matrix<U>::determinant(Matrix<U>* item)
 {
 	if (item->column == 1) {
 		return item->matrix[0][0];

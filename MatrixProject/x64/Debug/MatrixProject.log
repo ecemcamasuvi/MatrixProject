@@ -1,18 +1,3 @@
 ﻿  MatrixProject.cpp
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(14,2): warning C4091: 'typedef ': hiçbir değişken bildirimi yapılmadığında 'rgb' solunda yoksayılır
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(93,34): warning C4244: '=': 'int' - 'U' dönüşümü; veri kaybı olabilir
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(93,34): warning C4244:         with
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(93,34): warning C4244:         [
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(93,34): warning C4244:             U=float
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(93,34): warning C4244:         ]
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(66): message : sınıf şablon üye işlevi 'void Matrix<float>::createMatrix(void)' derlenirken
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(56): message : derlenen şablon işlevi 'void Matrix<float>::createMatrix(void)' örneği oluşturma başvurusuna bakın
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(52): message : sınıf şablon üye işlevi 'Matrix<float>::Matrix(int,int,char)' derlenirken
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(19): message : derlenen şablon işlevi 'Matrix<float>::Matrix(int,int,char)' örneği oluşturma başvurusuna bakın
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(19): message : derlenen sınıf şablon örneği oluşturma 'Matrix<float>' başvurusuna bakın
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(100,27): warning C4244: '=': 'int' - 'U' dönüşümü; veri kaybı olabilir
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(100,27): warning C4244:         with
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(100,27): warning C4244:         [
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(100,27): warning C4244:             U=float
-C:\Users\ecem\source\repos\MatrixProject\MatrixProject\Matrix.cpp(100,27): warning C4244:         ]
   MatrixProject.vcxproj -> C:\Users\ecem\source\repos\MatrixProject\x64\Debug\MatrixProject.exe

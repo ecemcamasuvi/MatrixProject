@@ -30,14 +30,14 @@ void Image<rgb>::readFromFile(std::string fileName, std::string fileFormat)
 		}
 		else {
 			char* info = new char[54];
-			readFile.seekg(0, std::ios::beg);
+			readFile.seekg(0, std::ios::beg);//konumlandýrma
 			readFile.read(info, 54);// read the 54-byte header
 			int width = *(int*)&info[18];// extract image height and width from header
 			int height = *(int*)&info[22];
 			/*this->image->setRow(height);
 			this->image->setColumn(width);*/
-			int size = 3 * width * height;
-			readFile.seekg(54, std::ios::beg);
+			int size = 3 * width * height;//her pixel red green blue
+			readFile.seekg(54, std::ios::beg);//header'ý atlayarak konumlandýr
 			char* data = new char[size];
 			readFile.read(data, size);// read the rest of the data at once
 			readFile.close();
