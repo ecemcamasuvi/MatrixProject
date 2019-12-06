@@ -16,39 +16,44 @@ typedef struct rgb {
 int main()
 {
 	//3. KISIM
-	std::cout << "ddsd";
-	Table<int>* tab = new Table<int>(4,37,'r');
-	std::cout << "\n";
-	std::cout<<tab->itemAt(2, 25);//0 verme
-	std::cout << "\n";
-	std::cout<<tab->itemAt("A2");
-	std::cout<<tab->itemAt("2","AA");
+	//std::cout << "ddsd";
+	//Table<int>* tab = new Table<int>(4,37,'r');
+	//std::cout << "\n";
+	//std::cout<<tab->itemAt(2, 25);//0 verme
+	//std::cout << "\n";
+	//std::cout<<tab->itemAt("A2");
+	//std::cout<<tab->itemAt("2","AA");
 
-	std::string s[] = { "aaaaa","2. satir","gulsah" };
-	tab->setRowNames(s , 3);
-	tab->setColNames(s, 2);
-	tab->print();
+	//std::string s[] = { "aaaaa","2. satir","gulsah" };
+	//tab->setRowNames(s , 3);
+	//tab->setColNames(s, 2);
+	//tab->print();
 
 
 	//2. KISIM
-	/*std::cout << "hjddklssssddsddd";
+	/*std::cout << "hjddssskdxzxhhsssdsssdddsssssddsddd333";
 	Image<rgb>* img = new Image<rgb>("untitled.bmp","bmp");
 	std::cout<<img->getColumn();
+	//img->imwrite("burhen.bin", "bin");
 	img->color2gray();//renkliyi griye çeviriyor
-	img->gray2binary(100);//siyah beyaz yapar
-	img->dilation();
+	img->gray2binary(35);//siyah beyaz yapar
+	img->imwrite("aaagri.bmp", "bmp");//yazma
+	img->erosion();
 	//img->imread("untitled.bmp", "bmp");//okuma
-	img->imwrite("eburhan.bmp", "bmp");//yazma*/
+	img->imwrite("aaaburhanerosion.bmp", "bmp");//yazma*/
 	/*
 	img->closing();
 	img->imwrite("binn.bmp", "bmp");*/
 
 	//1. KISIM
-	/*Matrix<int>* m1 = new Matrix<int>(2, 2, 'e');
-	Matrix<float>* m2 = new Matrix<float>(3, 3, 'r');
+	Matrix<int>* m1 = new Matrix<int>(3, 3, 'e');
+	Matrix<int>* m2 = new Matrix<int>(3, 3, 'r');
 	Matrix<int>* m3 = new Matrix<int>(3, 6, 1);
-	Matrix<int>* m4= new Matrix<int>(3, 6, 'e');*/
-	//m1 = m1->operator+(m3);//Toplama işlemi matris ile matris
+	Matrix<int>* m4= new Matrix<int>(3, 6, 'e');
+	m1 = m1->operator+(m2);//Toplama işlemi matris ile matris
+
+	m1 = m1 ^ 2;
+	m1->print();
 	/*m2->print();
 	m2 = m2->inv();
 	std::cout << "\n";

@@ -107,7 +107,7 @@ void Matrix<U>::createMatrix()
 template <class U>
 void Matrix<U>::resize(int rowInput, int columnInput)
 {
-	if (this->format != 'n') {
+	if (this->format != 'n'&&this->format!='r') {
 		this->row = rowInput;
 		this->column = columnInput;
 		createMatrix();
@@ -122,14 +122,18 @@ void Matrix<U>::resize(int rowInput, int columnInput)
 				matrixCurrent[i][j] = this->matrix[i][j];
 			}
 		}//hangisi küçükse onu al elimizdeki verileri depolamak için
+		int val = 0;
+		if (this->format == 'r') {
+			val = rand() % 256;
+		}
 		for (int i = ((rowInput < this->row) ? rowInput : this->row); i < rowInput; i++) {
 			for (int j = 0; j < columnInput; j++) {
-				matrixCurrent[i][j] = 0;
+				matrixCurrent[i][j] = val;
 			}
 		}//satýr bazýnda satýr sayýsý arttýysa artan kýsýmlara 0 ata azalmadýysa bu döngüye hiç girme
 		for (int i = 0; i < rowInput; i++) {
 			for (int j = ((columnInput < this->column) ? columnInput : this->column); j < columnInput; j++) {
-				matrixCurrent[i][j] = 0;
+				matrixCurrent[i][j] = val;
 			}
 		}//sütun bazýnda "" ""
 		//Herhangi bir örüntü bulunmayan bir matrisin boyutu büyüdüyse yeni oluþan bölgeleri 0'a setle. 

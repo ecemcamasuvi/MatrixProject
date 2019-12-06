@@ -63,28 +63,46 @@ void Image<rgb>::readFromFile(std::string fileName, std::string fileFormat)
 			std::cout << "Cannot open file!\n";
 		}
 		else {
-			char* info = new char[2];
-			readFile.seekg(0, std::ios::beg);
-			readFile.read(info, 2);
-			int height = *(int*)&info[0];
-			int width = *(int*)&info[1];
-			int size = 3 * width * height;
-			readFile.seekg(2, std::ios::beg);
-			char* data = new char[size];
-			readFile.read(data, size);// read the rest of the data at once
-			readFile.close();
+			FILE* fp;
+			int n = fileName.length();
+			char* c = new char[(n + 1)];
+			strcpy(c, fileName.c_str());
+			fp = fopen(c, "r");
+			int size = 0;
+			do {
+				fgetc(fp);
+				if (feof(fp)) {
+					break;
+				}
+				size++;
+			} while (1);
+			fclose(fp);
+			int* data = new int[size];
+			int i = 0;
+			fp = fopen(c, "r");
+			do {
+				data[i] = fgetc(fp);
+				if (feof(fp)) {
+					break;
+				}
+				i++;
+			} while (1);
+
+			int height = data[0];
+			int width = data[1];
 			this->redVal = new Matrix<int>(height, width, 0);
 			this->greenVal = new Matrix<int>(height, width, 0);
 			this->blueVal = new Matrix<int>(height, width, 0);
-			int k = 0;
+			int k = 2;
 			for (int i = 0; i < height; i++) {
 				for (int j = 0; j < width; j++) {
 					this->redVal->matrix[i][j] = *(int*)&data[k];
-					this->greenVal->matrix[i][j] = *(int*)&data[k + 1];
-					this->blueVal->matrix[i][j] = *(int*)&data[k + 2];
-					k += 3;
+					this->greenVal->matrix[i][j] = *(int*)&data[k];
+					this->blueVal->matrix[i][j] = *(int*)&data[k];
+					k++;
 				}
 			}
+			fclose(fp);
 			//this->image->setColumn(this->image->getColumn() / 3);
 		}
 	}
@@ -124,9 +142,9 @@ void Image<rgb>::imwrite(std::string fileName, std::string fileFormat)
 		{
 			for (int j = 0; j < w; j++)
 			{
-				img[k] = this->redVal->matrix[i][j];
-				img[k + 1] = this->greenVal->matrix[i][j];
-				img[k + 2] = this->blueVal->matrix[i][j];
+				img[k] = (unsigned char)this->redVal->matrix[i][j];
+				img[k + 1] = (unsigned char)this->greenVal->matrix[i][j];
+				img[k + 2] = (unsigned char)this->blueVal->matrix[i][j];
 				k += 3;
 			}
 		}
@@ -157,32 +175,32 @@ void Image<rgb>::imwrite(std::string fileName, std::string fileFormat)
 		fclose(f);
 	}
 	else if (fileFormat._Equal("bin")) {
-		FILE* f;
-		unsigned char* img = NULL;
-		int w = this->redVal->getColumn(); //1 rgb =3byte
+		FILE* fp;
+		int n = fileName.length();
+		char* c = new char[(n + 1)];
+		strcpy(c, fileName.c_str());
+		int w = this->redVal->getColumn();
 		int h = this->redVal->getRow();
-		int filesize = 2 + 3 * w * h;  //w is your image width, h is image height, both int
-		img = (unsigned char*)malloc(3 * w * h);
-		memset(img, 0, 3 * w * h);
-		int k = 0;
+		int filesize = 2 + w * h;  //w is your image width, h is image height, both int
+		unsigned char* img = NULL;
+		img = (unsigned char*)malloc(filesize);
+		memset(img, 0, filesize);
+		img[0] = (unsigned char)h;
+		img[1] = (unsigned char)w;
+
+		int k = 2;
 		for (int i = 0; i < h; i++)
 		{
 			for (int j = 0; j < w; j++)
 			{
-				img[k] = this->redVal->matrix[i][j];
-				img[k + 1] = this->greenVal->matrix[i][j];
-				img[k + 2] = this->blueVal->matrix[i][j];
-				k += 3;
+				img[k] = (unsigned char)this->redVal->matrix[i][j];
+				k++;
 			}
 		}
-		unsigned char bmpfileheader[2] = { w,h };
-		int n = fileName.length();
-		char* c = new char[(n + 1)];
-		strcpy(c, fileName.c_str());
-		f = fopen(c, "wb");
-		fwrite(bmpfileheader, 1, 2, f);
-		fwrite(img, 1, filesize - 2, f);
-		fclose(f);
+		fp = fopen(c, "wb");
+		fwrite(img, 1, filesize, fp);
+		fclose(fp);
+
 	}
 }
 
@@ -247,20 +265,21 @@ void Image<rgb>::erosion()//siyah kýsýmlarý daralt
 	if (this->isBinary == true) {
 		int width = this->redVal->getColumn();
 		int height = this->redVal->getRow();
-		for (int i = 1; i < height; i++)
-		{
-			for (int j = 3; j + 2 < width; j += 3)
-			{
-				if (this->redVal->matrix[i][j] == 255) {//siyah kýsýmlarý daralt
-					this->redVal->matrix[i - 1][j - 1] = 255;
+		for (int i = 0; i + 5 <= height; i += 5){
+			for (int j = 0; j + 5 <= width; j += 5){
+				for (int a = i + 1; a + 2 < i + 5; a++) {
+					for (int b = j + 1; b + 2 < j + 5; b++) {
+						if (this->redVal->matrix[a][b] == 255) {
+							for (int x = -1; x < 2; x++) {
+								for (int y = -1; y < 2; y++) {
+									this->redVal->matrix[a + x][b + y] = 255;
+									this->greenVal->matrix[a + x][b + y] = 255;
+									this->blueVal->matrix[a + x][b + y] = 255;
+								}
+							}
+						}
+					}
 				}
-				if (this->greenVal->matrix[i][j] == 255) {//siyah kýsýmlarý daralt
-					this->greenVal->matrix[i - 1][j - 1] = 255;
-				}
-				if (this->blueVal->matrix[i][j] == 255) {//siyah kýsýmlarý daralt
-					this->blueVal->matrix[i - 1][j - 1] = 255;
-				}
-
 			}
 		}
 	}
@@ -275,18 +294,23 @@ void Image<rgb>::dilation()
 	if (this->isBinary == true) {
 		int width = this->redVal->getColumn();
 		int height = this->redVal->getRow();
-		for (int i = 1; i < height; i++)
+		for (int i = 0; i + 5 <= height; i += 5)
 		{
-			for (int j = 3; j + 2 < width; j += 3)
+			for (int j = 0; j + 5 <= width; j += 5)
 			{
-				if (this->redVal->matrix[i][j] == 0) {//siyah kýsýmlarý geniþlet
-					this->redVal->matrix[i - 1][j - 1] = 0;
-				}
-				if (this->greenVal->matrix[i][j] == 255) {//siyah kýsýmlarý geniþlet
-					this->greenVal->matrix[i - 1][j - 1] = 0;
-				}
-				if (this->blueVal->matrix[i][j] == 255) {//siyah kýsýmlarý geniþlet
-					this->blueVal->matrix[i - 1][j - 1] = 0;
+				for (int a = i+1; a+2 < i + 5; a++) {
+					for (int b = j+1; b+2 < j + 5; b++) {
+						if (this->redVal->matrix[a][b] == 0) {
+							for (int x = -1; x < 2; x++) {
+								for (int y = -1; y < 2; y++) {
+									this->redVal->matrix[a + x][b + y] = 0;
+									this->greenVal->matrix[a + x][b + y] = 0;
+									this->blueVal->matrix[a + x][b + y] = 0;
+								}
+							}
+
+						}
+					}
 				}
 			}
 		}

@@ -1,3 +1,3 @@
 ﻿  MatrixProject.cpp
 C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(14,2): warning C4091: 'typedef ': hiçbir değişken bildirimi yapılmadığında 'rgb' solunda yoksayılır
-  MatrixProject.vcxproj -> C:\Users\ecem\source\repos\MatrixProject\x64\Debug\MatrixProject.exe
+C:\Users\ecem\source\repos\MatrixProject\MatrixProject\MatrixProject.cpp(55,13): error C2296: '^': geçersiz, sol işlenen 'Matrix<int> *' türünde
